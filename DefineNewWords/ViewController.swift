@@ -15,6 +15,7 @@ class ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshWord))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addWord))
         
         let filePath = Bundle.main.url(forResource: "AvailableWords", withExtension: "txt")
@@ -25,8 +26,7 @@ class ViewController: UITableViewController {
             startWords.append("Empty")
         }
         
-        rootWord = startWords.randomElement()!
-        title = "Define New Words - \(rootWord!)"
+        refreshWord()
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -39,6 +39,13 @@ class ViewController: UITableViewController {
         cell.textLabel?.text = usedWords[indexPath.row]
         
         return cell
+    }
+    
+    @objc func refreshWord() {
+        usedWords.removeAll()
+        tableView.reloadData()
+        rootWord = startWords.randomElement()!
+        title = "Define New Words - \(rootWord!)"
     }
     
     @objc func addWord() {
